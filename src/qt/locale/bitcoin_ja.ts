@@ -342,7 +342,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+20"/>
         <source>&amp;Transactions</source>
-        <translation>取引(&amp;T)</translation>
+        <translation>取引履歴(&amp;T)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -468,12 +468,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+7"/>
         <source>&amp;Receive</source>
-        <translation>入金(&amp;R)</translation>
+        <translation>受取用アドレス帳(&amp;R)</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>&amp;Addresses</source>
-        <translation>アドレス帳(&amp;A)</translation>
+        <translation>送金用アドレス帳(&amp;A)</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -607,7 +607,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+3"/>
         <source>Information</source>
-        <translation>情報</translation>
+        <translation>インフォメーション</translation>
     </message>
     <message>
         <location line="+70"/>
@@ -646,7 +646,7 @@ Amount: %2
 Type: %3
 Address: %4
 </source>
-        <translation>日付: %1
+        <translation>日時: %1
 取引量: %2
 タイプ: %3
 アドレス: %4
@@ -955,7 +955,7 @@ Address: %4
     <message>
         <location line="+3"/>
         <source>&amp;Display addresses in transaction list</source>
-        <translation>アドレスを取引リストに表示する(&amp;D)</translation>
+        <translation>アドレスを取引履歴に表示する(&amp;D)</translation>
     </message>
     <message>
         <location line="+71"/>
@@ -1700,7 +1700,7 @@ Address: %4
     <message>
         <location line="+4"/>
         <source>Date</source>
-        <translation>日付</translation>
+        <translation>日時</translation>
     </message>
     <message>
         <location line="+7"/>
