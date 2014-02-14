@@ -28,8 +28,6 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
 
     QString font            = "Arial";
 
-   QString splash_filepath[] = {QString(":/images/splash_1"), QString(":/images/splash_2"), QString(":/images/splash_3"), QString(":/images/splash_4")};
-
     // load the bitmap for writing some text over it
     QPixmap newPixmap;
 /*
@@ -40,10 +38,7 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
         newPixmap     = QPixmap(":/images/splash2");
     }
 */
-    time_t timer;
-    time(&timer);
-    int index = timer & 0x03;
-    newPixmap = (splash_filepath[index]);
+    newPixmap = QPixmap(":/images/splash");
 
 
     QPainter pixPaint(&newPixmap);

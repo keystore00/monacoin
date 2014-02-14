@@ -26,6 +26,14 @@ static int column_alignments[] = {
         Qt::AlignLeft|Qt::AlignVCenter,
         Qt::AlignRight|Qt::AlignVCenter
     };
+// Alignments for header
+static int column_header_alignments[] = {
+        Qt::AlignLeft|Qt::AlignVCenter,
+        Qt::AlignHCenter|Qt::AlignVCenter,
+        Qt::AlignHCenter|Qt::AlignVCenter,
+        Qt::AlignHCenter|Qt::AlignVCenter,
+        Qt::AlignHCenter|Qt::AlignVCenter
+    };
 
 // Comparison operator for sort/binary search of model tx list
 struct TxLessThan
@@ -590,7 +598,7 @@ QVariant TransactionTableModel::headerData(int section, Qt::Orientation orientat
         }
         else if (role == Qt::TextAlignmentRole)
         {
-            return column_alignments[section];
+            return column_header_alignments[section];
         } else if (role == Qt::ToolTipRole)
         {
             switch(section)
