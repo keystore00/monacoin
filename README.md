@@ -3,9 +3,10 @@ Monacoin integration/staging tree
 
 http://www.monacoin.com
 
-Copyright (c) 2009-2013 Bitcoin Developers
-Copyright (c) 2011-2013 Litecoin Developers
-Copyright (c) 2013      Monacoin Developers
+Copyright (c) 2009-2014 Bitcoin Developers
+Copyright (c) 2011-2014 Litecoin Developers
+Copyright (c) 2013-2014 Dr. Kimoto Chan
+Copyright (c) 2013-2014 Monacoin Developers
 
 What is Monacoin?
 ----------------
@@ -14,10 +15,9 @@ Monacoin is a lite version of Bitcoin using scrypt as a proof-of-work algorithm.
  - 1.5 minute block targets
  - subsidy halves in 1051k blocks (~3 years)
  - ~168 million total coins
-
-The rest is the same as Bitcoin.
  - 50 coins per block
  - 1056 blocks to retarget difficulty
+ - kimoto gravity well
 
 For more information, as well as an immediately useable, binary version of
 the Monacoin client sofware, see http://www.monacoin.com
