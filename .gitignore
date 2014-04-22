@@ -248,4 +248,3 @@ qrc_*.cpp
 build
 
 !src/leveldb*/Makefile
->>>>>>> aa77ae3a8c31b7bada91e53d451172f01405ce51
