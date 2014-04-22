@@ -119,7 +119,7 @@ OverviewPage::OverviewPage(QWidget *parent) :
 
     // Customized branding image.
     boost::filesystem::path bgpath = GetDataDir(false);
-    bgpath /= "monacoin.png";
+    bgpath /= "custom/monacoin.png";
     QPixmap bgcoin(bgpath.string().c_str());
 
     if ( !bgcoin.isNull() ) {

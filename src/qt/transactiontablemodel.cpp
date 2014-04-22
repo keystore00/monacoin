@@ -11,6 +11,7 @@
 
 #include "wallet.h"
 #include "ui_interface.h"
+#include "util.h"
 
 #include <QList>
 #include <QColor>
@@ -239,6 +240,16 @@ TransactionTableModel::TransactionTableModel(CWallet* wallet, WalletModel *paren
     timer->start(MODEL_UPDATE_DELAY);
 
     connect(walletModel->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
+
+    // Customized icons.
+    namespace fs = boost::filesystem;
+    fs::path custompath = GetDataDir(false);
+    custompath /= "custom";
+
+    tx_mined = !fs::exists(custompath / "tx_mined.png") ? ":/icons/tx_mined" : (custompath / "tx_mined.png").string().c_str();
+    tx_input = !fs::exists(custompath / "tx_input.png") ? ":/icons/tx_input" : (custompath / "tx_input.png").string().c_str();
+    tx_output = !fs::exists(custompath / "tx_output.png") ? ":/icons/tx_output" : (custompath / "tx_output.png").string().c_str();
+    tx_inout = !fs::exists(custompath / "tx_inout.png") ? ":/icons/tx_inout" : (custompath / "tx_inout.png").string().c_str();
 }
 
 TransactionTableModel::~TransactionTableModel()
@@ -378,15 +389,15 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord *wtx
     switch(wtx->type)
     {
     case TransactionRecord::Generated:
-        return QIcon(":/icons/tx_mined");
+        return QIcon(tx_mined);
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvFromOther:
-        return QIcon(":/icons/tx_input");
+        return QIcon(tx_input);
     case TransactionRecord::SendToAddress:
     case TransactionRecord::SendToOther:
-        return QIcon(":/icons/tx_output");
+        return QIcon(tx_output);
     default:
-        return QIcon(":/icons/tx_inout");
+        return QIcon(tx_inout);
     }
     return QVariant();
 }

@@ -108,6 +108,8 @@ private:
     TransactionView *transactionView;
     RPCConsole *rpcConsole;
 
+  QString iconOverview, iconSend, iconReceivingAddresses, iconHistory, iconAddressBook;
+
     QMovie *syncIconMovie;
     /** Keep track of previous number of blocks, to detect progress */
     int prevBlocks;

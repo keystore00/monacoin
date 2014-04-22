@@ -21,6 +21,7 @@
 #include "guiconstants.h"
 #include "notificator.h"
 #include "guiutil.h"
+#include "util.h"
 #include "rpcconsole.h"
 #include "ui_interface.h"
 #include "wallet.h"
@@ -88,6 +89,16 @@ BitcoinGUI::BitcoinGUI(QWidget *parent) :
 
     // Accept D&D of URIs
     setAcceptDrops(true);
+
+    // Custom icons
+    namespace fs = boost::filesystem;
+    fs::path custompath = GetDataDir(false);
+    custompath /= "custom";
+    iconOverview = !fs::exists(custompath / "overview.png") ? ":/icons/overview" : (custompath / "overview.png").string().c_str();
+    iconSend = !fs::exists(custompath / "send.png") ? ":/icons/send" : (custompath / "send.png").string().c_str();
+    iconReceivingAddresses = !fs::exists(custompath / "receiving_addresses.png") ? ":/icons/receiving_addresses" : (custompath / "receiving_addresses.png").string().c_str();
+    iconHistory = !fs::exists(custompath / "history.png") ? ":/icons/history" : (custompath / "history.png").string().c_str();
+    iconAddressBook = !fs::exists(custompath / "address-book.png") ? ":/icons/address-book" : (custompath / "address-book.png").string().c_str();
 
     // Create actions for the toolbar, menu bar and tray/dock icon
     // Needs walletFrame to be initialized
@@ -171,35 +182,35 @@ void BitcoinGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Overview"), this);
+    overviewAction = new QAction(QIcon(iconOverview), tr("&Overview"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
-    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
+    sendCoinsAction = new QAction(QIcon(iconSend), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Monacoin address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(sendCoinsAction);
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive"), this);
+    receiveCoinsAction = new QAction(QIcon(iconReceivingAddresses), tr("&Receive"), this);
     receiveCoinsAction->setStatusTip(tr("Show the list of addresses for receiving payments"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
     receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(receiveCoinsAction);
 
-    historyAction = new QAction(QIcon(":/icons/history"), tr("&Transactions"), this);
+    historyAction = new QAction(QIcon(iconHistory), tr("&Transactions"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    addressBookAction = new QAction(QIcon(":/icons/address-book"), tr("&Addresses"), this);
+    addressBookAction = new QAction(QIcon(iconAddressBook), tr("&Addresses"), this);
     addressBookAction->setStatusTip(tr("Edit the list of stored addresses and labels"));
     addressBookAction->setToolTip(addressBookAction->statusTip());
     addressBookAction->setCheckable(true);
