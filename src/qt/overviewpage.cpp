@@ -8,6 +8,7 @@
 #include "transactiontablemodel.h"
 #include "transactionfilterproxy.h"
 #include "guiutil.h"
+#include "util.h"
 #include "guiconstants.h"
 
 #include <QAbstractItemDelegate>
@@ -115,6 +116,15 @@ OverviewPage::OverviewPage(QWidget *parent) :
     // init "out of sync" warning labels
     ui->labelWalletStatus->setText("(" + tr("out of sync") + ")");
     ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
+
+    // Customized branding image.
+    boost::filesystem::path bgpath = GetDataDir(false);
+    bgpath /= "monacoin.png";
+    QPixmap bgcoin(bgpath.string().c_str());
+
+    if ( !bgcoin.isNull() ) {
+        ui->label_wallet_bgcoin->setPixmap(bgcoin);
+    }
 
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
