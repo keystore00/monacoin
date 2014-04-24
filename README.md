@@ -3,10 +3,11 @@ Monacoin integration/staging tree
 
 http://www.monacoin.com
 
-Copyright (c) 2009-2014 Bitcoin Developers
-Copyright (c) 2011-2014 Litecoin Developers
-Copyright (c) 2013-2014 Dr. Kimoto Chan
-Copyright (c) 2013-2014 Monacoin Developers
+Copyright (c) 2009-2014 Bitcoin Developers  
+Copyright (c) 2011-2014 Litecoin Developers  
+Copyright (c) 2013-2014 Dr. Kimoto Chan  
+Copyright (c) 2009-2014 The DigiByte developers  
+Copyright (c) 2013-2014 Monacoin Developers  
 
 What is Monacoin?
 ----------------
