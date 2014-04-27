@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QIcon>
+#include <QSound>
 
 QT_BEGIN_NAMESPACE
 class QSystemTrayIcon;
@@ -30,6 +31,13 @@ public:
         Warning,        /**< Notify user of potential problem */
         Critical        /**< An error occurred */
     };
+  //Sound
+     enum Sound
+       {
+	 Send,
+	 Receive,
+	 NoSound
+       };
 
 public slots:
     /** Show notification message.
@@ -40,7 +48,7 @@ public slots:
        @param[in] millisTimeout notification timeout in milliseconds (defaults to 10 seconds)
        @note Platform implementations are free to ignore any of the provided fields except for \a text.
      */
-    void notify(Class cls, const QString &title, const QString &text,
+    void notify(Class cls, Sound snd, const QString &title, const QString &text,
                 const QIcon &icon = QIcon(), int millisTimeout = 10000);
 
 private:
@@ -56,12 +64,13 @@ private:
     QString programName;
     Mode mode;
     QSystemTrayIcon *trayIcon;
+    QSound *soundSend, *soundReceive;
 #ifdef USE_DBUS
     QDBusInterface *interface;
 
     void notifyDBus(Class cls, const QString &title, const QString &text, const QIcon &icon, int millisTimeout);
 #endif
-    void notifySystray(Class cls, const QString &title, const QString &text, const QIcon &icon, int millisTimeout);
+  void notifySystray(Class cls, Sound snd, const QString &title, const QString &text, const QIcon &icon, int millisTimeout);
 #ifdef Q_OS_MAC
     void notifyGrowl(Class cls, const QString &title, const QString &text, const QIcon &icon);
     void notifyMacUserNotificationCenter(Class cls, const QString &title, const QString &text, const QIcon &icon);

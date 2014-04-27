@@ -8,7 +8,7 @@
 #include "transactiontablemodel.h"
 #include "transactionfilterproxy.h"
 #include "guiutil.h"
-#include "util.h"
+#include "custom.h"
 #include "guiconstants.h"
 
 #include <QAbstractItemDelegate>
@@ -118,8 +118,8 @@ OverviewPage::OverviewPage(QWidget *parent) :
     ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
 
     // Customized branding image.
-    boost::filesystem::path bgpath = GetDataDir(false);
-    bgpath /= "custom/monacoin.png";
+    boost::filesystem::path bgpath = GetCustomDir();
+    bgpath /= "monacoin.png";
     QPixmap bgcoin(bgpath.string().c_str());
 
     if ( !bgcoin.isNull() ) {

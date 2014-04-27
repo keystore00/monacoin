@@ -75,6 +75,8 @@ private:
     QVariant txStatusDecoration(const TransactionRecord *wtx) const;
     QVariant txAddressDecoration(const TransactionRecord *wtx) const;
     QString tx_mined, tx_input, tx_output, tx_inout;
+    QString iconTransactionConfirmed, iconTransactionN;
+    QString iconTransaction0, iconTransaction1, iconTransaction2, iconTransaction3, iconTransaction4, iconTransaction5;
 
 public slots:
     void updateTransaction(const QString &hash, int status);

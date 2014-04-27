@@ -1,4 +1,5 @@
 #include "notificator.h"
+#include "custom.h"
 
 #include <QMetaType>
 #include <QVariant>
@@ -38,6 +39,12 @@ Notificator::Notificator(const QString &programName, QSystemTrayIcon *trayicon, 
     {
         mode = QSystemTray;
     }
+    // Custom sounds
+    namespace fs = boost::filesystem;
+    fs::path custompath = GetCustomDir();
+    soundSend = !fs::exists(custompath / "send.wav") ? NULL : new QSound((custompath / "send.wav").string().c_str(), this);
+    soundReceive = !fs::exists(custompath / "receive.wav") ? NULL : new QSound((custompath / "receive.wav").string().c_str(), this);
+
 #ifdef USE_DBUS
     interface = new QDBusInterface("org.freedesktop.Notifications",
           "/org/freedesktop/Notifications", "org.freedesktop.Notifications");
@@ -217,15 +224,35 @@ void Notificator::notifyDBus(Class cls, const QString &title, const QString &tex
 }
 #endif
 
-void Notificator::notifySystray(Class cls, const QString &title, const QString &text, const QIcon &icon, int millisTimeout)
+void Notificator::notifySystray(Class cls, Sound snd, const QString &title, const QString &text, const QIcon &icon, int millisTimeout)
 {
     Q_UNUSED(icon);
     QSystemTrayIcon::MessageIcon sicon = QSystemTrayIcon::NoIcon;
+    QSound *sound;
     switch(cls) // Set icon based on class
     {
-    case Information: sicon = QSystemTrayIcon::Information; break;
-    case Warning: sicon = QSystemTrayIcon::Warning; break;
-    case Critical: sicon = QSystemTrayIcon::Critical; break;
+    case Information:
+      sicon = QSystemTrayIcon::Information;
+      break;
+    case Warning:
+      sicon = QSystemTrayIcon::Warning;
+      break;
+    case Critical:
+      sicon = QSystemTrayIcon::Critical;
+      break;
+    }
+    switch(snd) //Set sound
+      {
+      case Send:
+	sound = soundSend;
+	break;
+      case Receive:
+	sound = soundReceive;
+	break;
+      }
+
+    if (sound != NULL) {
+      sound->play();
     }
     trayIcon->showMessage(title, text, sicon, millisTimeout);
 }
@@ -285,7 +312,7 @@ void Notificator::notifyMacUserNotificationCenter(Class cls, const QString &titl
 
 #endif
 
-void Notificator::notify(Class cls, const QString &title, const QString &text, const QIcon &icon, int millisTimeout)
+void Notificator::notify(Class cls, Sound snd, const QString &title, const QString &text, const QIcon &icon, int millisTimeout)
 {
     switch(mode)
     {
@@ -295,7 +322,7 @@ void Notificator::notify(Class cls, const QString &title, const QString &text, c
         break;
 #endif
     case QSystemTray:
-        notifySystray(cls, title, text, icon, millisTimeout);
+        notifySystray(cls, snd, title, text, icon, millisTimeout);
         break;
 #ifdef Q_OS_MAC
     case UserNotificationCenter:

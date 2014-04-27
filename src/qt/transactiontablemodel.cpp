@@ -11,7 +11,7 @@
 
 #include "wallet.h"
 #include "ui_interface.h"
-#include "util.h"
+#include "custom.h"
 
 #include <QList>
 #include <QColor>
@@ -242,14 +242,19 @@ TransactionTableModel::TransactionTableModel(CWallet* wallet, WalletModel *paren
     connect(walletModel->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
 
     // Customized icons.
-    namespace fs = boost::filesystem;
-    fs::path custompath = GetDataDir(false);
-    custompath /= "custom";
-
-    tx_mined = !fs::exists(custompath / "tx_mined.png") ? ":/icons/tx_mined" : (custompath / "tx_mined.png").string().c_str();
-    tx_input = !fs::exists(custompath / "tx_input.png") ? ":/icons/tx_input" : (custompath / "tx_input.png").string().c_str();
-    tx_output = !fs::exists(custompath / "tx_output.png") ? ":/icons/tx_output" : (custompath / "tx_output.png").string().c_str();
-    tx_inout = !fs::exists(custompath / "tx_inout.png") ? ":/icons/tx_inout" : (custompath / "tx_inout.png").string().c_str();
+    boost::filesystem::path custompath = GetCustomDir();
+    tx_mined = GetCustomPath(custompath/"tx_mined.png", ":/icons/tx_mined");
+    tx_input = GetCustomPath(custompath/"tx_input.png", ":/icons/tx_input");
+    tx_output = GetCustomPath(custompath/"tx_output.png", ":/icons/tx_output");
+    tx_inout = GetCustomPath(custompath/"tx_inout.png", ":/icons/tx_inout");
+    iconTransactionConfirmed = GetCustomPath(custompath/"transaction_confirmed.png", ":/icons/transaction_confirmed");    
+    iconTransaction0 = GetCustomPath(custompath/"transaction_0.png", ":/icons/transaction_0");    
+    iconTransaction1 = GetCustomPath(custompath/"transaction_1.png", ":/icons/transaction_1");    
+    iconTransaction2 = GetCustomPath(custompath/"transaction_2.png", ":/icons/transaction_2");    
+    iconTransaction3 = GetCustomPath(custompath/"transaction_3.png", ":/icons/transaction_3");    
+    iconTransaction4 = GetCustomPath(custompath/"transaction_4.png", ":/icons/transaction_4");    
+    iconTransaction5 = GetCustomPath(custompath/"transaction_5.png", ":/icons/transaction_5");    
+    iconTransactionN = GetCustomPath(custompath/"transaction_%1.png", ":/icons/transaction_%1");    
 }
 
 TransactionTableModel::~TransactionTableModel()
@@ -463,13 +468,13 @@ QVariant TransactionTableModel::txStatusDecoration(const TransactionRecord *wtx)
         case TransactionStatus::Immature: {
             int total = wtx->status.depth + wtx->status.matures_in;
             int part = (wtx->status.depth * 4 / total) + 1;
-            return QIcon(QString(":/icons/transaction_%1").arg(part));
+            return QIcon(iconTransactionN.arg(part));
             }
         case TransactionStatus::Mature:
-            return QIcon(":/icons/transaction_confirmed");
+            return QIcon(iconTransactionConfirmed);
         case TransactionStatus::MaturesWarning:
         case TransactionStatus::NotAccepted:
-            return QIcon(":/icons/transaction_0");
+            return QIcon(iconTransaction0);
         }
     }
     else
@@ -485,15 +490,15 @@ QVariant TransactionTableModel::txStatusDecoration(const TransactionRecord *wtx)
         case TransactionStatus::Unconfirmed:
             switch(wtx->status.depth)
             {
-            case 0: return QIcon(":/icons/transaction_0");
-            case 1: return QIcon(":/icons/transaction_1");
-            case 2: return QIcon(":/icons/transaction_2");
-            case 3: return QIcon(":/icons/transaction_3");
-            case 4: return QIcon(":/icons/transaction_4");
-            default: return QIcon(":/icons/transaction_5");
+            case 0: return QIcon(iconTransaction1);
+            case 1: return QIcon(iconTransaction1);
+            case 2: return QIcon(iconTransaction1);
+            case 3: return QIcon(iconTransaction1);
+            case 4: return QIcon(iconTransaction1);
+            default: return QIcon(iconTransaction1);
             };
         case TransactionStatus::HaveConfirmations:
-            return QIcon(":/icons/transaction_confirmed");
+            return QIcon(iconTransactionConfirmed);
         }
     }
     return QColor(0,0,0);

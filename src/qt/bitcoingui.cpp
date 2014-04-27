@@ -21,7 +21,7 @@
 #include "guiconstants.h"
 #include "notificator.h"
 #include "guiutil.h"
-#include "util.h"
+#include "custom.h"
 #include "rpcconsole.h"
 #include "ui_interface.h"
 #include "wallet.h"
@@ -91,14 +91,20 @@ BitcoinGUI::BitcoinGUI(QWidget *parent) :
     setAcceptDrops(true);
 
     // Custom icons
-    namespace fs = boost::filesystem;
-    fs::path custompath = GetDataDir(false);
-    custompath /= "custom";
-    iconOverview = !fs::exists(custompath / "overview.png") ? ":/icons/overview" : (custompath / "overview.png").string().c_str();
-    iconSend = !fs::exists(custompath / "send.png") ? ":/icons/send" : (custompath / "send.png").string().c_str();
-    iconReceivingAddresses = !fs::exists(custompath / "receiving_addresses.png") ? ":/icons/receiving_addresses" : (custompath / "receiving_addresses.png").string().c_str();
-    iconHistory = !fs::exists(custompath / "history.png") ? ":/icons/history" : (custompath / "history.png").string().c_str();
-    iconAddressBook = !fs::exists(custompath / "address-book.png") ? ":/icons/address-book" : (custompath / "address-book.png").string().c_str();
+    boost::filesystem::path custompath = GetCustomDir();
+    iconOverview = GetCustomPath(custompath/"overview.png", ":/icons/overview");
+    iconSend = GetCustomPath(custompath/"send.png", ":/icons/send");
+    iconReceivingAddresses = GetCustomPath(custompath/"receiving_addresses.png", ":/icons/receiving_addresses");
+    iconHistory = GetCustomPath(custompath/"history.png", ":/icons/history");
+    iconAddressBook = GetCustomPath(custompath/"address-book.png", ":/icons/address-book");
+    iconConnect0 = GetCustomPath(custompath/"connect_0.png", ":/icons/connect_0");
+    iconConnect1 = GetCustomPath(custompath/"connect_1.png", ":/icons/connect_1");
+    iconConnect2 = GetCustomPath(custompath/"connect_2.png", ":/icons/connect_2");
+    iconConnect3 = GetCustomPath(custompath/"connect_3.png", ":/icons/connect_3");
+    iconConnect4 = GetCustomPath(custompath/"connect_4.png", ":/icons/connect_4");
+    iconSynced = GetCustomPath(custompath/"synced.png", ":/icons/synced");
+    iconLockOpend = GetCustomPath(custompath/"lock_opened.png", ":/icons/lock_opened");
+    iconLockClosed = GetCustomPath(custompath/"lock_closed.png", ":/icons/lock_closed");
 
     // Create actions for the toolbar, menu bar and tray/dock icon
     // Needs walletFrame to be initialized
@@ -528,11 +534,11 @@ void BitcoinGUI::setNumConnections(int count)
     QString icon;
     switch(count)
     {
-    case 0: icon = ":/icons/connect_0"; break;
-    case 1: case 2: case 3: icon = ":/icons/connect_1"; break;
-    case 4: case 5: case 6: icon = ":/icons/connect_2"; break;
-    case 7: case 8: case 9: icon = ":/icons/connect_3"; break;
-    default: icon = ":/icons/connect_4"; break;
+    case 0: icon = iconConnect0; break;
+    case 1: case 2: case 3: icon = iconConnect1; break;
+    case 4: case 5: case 6: icon = iconConnect2; break;
+    case 7: case 8: case 9: icon = iconConnect3; break;
+    default: icon = iconConnect4; break;
     }
     labelConnectionsIcon->setPixmap(QIcon(icon).pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
     labelConnectionsIcon->setToolTip(tr("%n active connection(s) to Monacoin network", "", count));
@@ -580,7 +586,7 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     if(secs < 90*60 && count >= nTotalBlocks)
     {
         tooltip = tr("Up to date") + QString(".<br>") + tooltip;
-        labelBlocksIcon->setPixmap(QIcon(":/icons/synced").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
+        labelBlocksIcon->setPixmap(QIcon(iconSynced).pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
 
         walletFrame->showOutOfSyncWarning(false);
 
@@ -632,12 +638,13 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     progressBar->setToolTip(tooltip);
 }
 
-void BitcoinGUI::message(const QString &title, const QString &message, unsigned int style, bool *ret)
+void BitcoinGUI::message(const QString &title, const QString &message, unsigned int style, bool *ret, const QString &extra)
 {
     QString strTitle = tr("Monacoin"); // default title
     // Default to information icon
     int nMBoxIcon = QMessageBox::Information;
     int nNotifyIcon = Notificator::Information;
+    int nNotifySound = Notificator::NoSound;
 
     // Override title based on style
     QString msgType;
@@ -667,6 +674,13 @@ void BitcoinGUI::message(const QString &title, const QString &message, unsigned 
         nNotifyIcon = Notificator::Warning;
     }
 
+    // Sound
+    if (extra == "Sound Send") {
+      nNotifySound = Notificator::Send;
+    } else if (extra == "Sound Receive") {
+      nNotifySound = Notificator::Receive;
+    }
+
     // Display message
     if (style & CClientUIInterface::MODAL) {
         // Check for buttons, use OK as default, if none was supplied
@@ -680,7 +694,7 @@ void BitcoinGUI::message(const QString &title, const QString &message, unsigned 
             *ret = r == QMessageBox::Ok;
     }
     else
-        notificator->notify((Notificator::Class)nNotifyIcon, strTitle, message);
+        notificator->notify((Notificator::Class)nNotifyIcon, (Notificator::Sound)nNotifySound, strTitle, message);
 }
 
 void BitcoinGUI::changeEvent(QEvent *e)
@@ -739,7 +753,7 @@ void BitcoinGUI::incomingTransaction(const QString& date, int unit, qint64 amoun
                   .arg(date)
                   .arg(BitcoinUnits::formatWithUnit(unit, amount, true))
                   .arg(type)
-                  .arg(address), CClientUIInterface::MSG_INFORMATION);
+	    .arg(address), CClientUIInterface::MSG_INFORMATION, NULL, (amount)<0 ? "Sound Send" : "Sound Receive");
 }
 
 void BitcoinGUI::dragEnterEvent(QDragEnterEvent *event)
@@ -804,7 +818,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Unlocked:
         labelEncryptionIcon->show();
-        labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_open").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+        labelEncryptionIcon->setPixmap(QIcon(iconLockOpend).pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>unlocked</b>"));
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);
@@ -812,7 +826,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         break;
     case WalletModel::Locked:
         labelEncryptionIcon->show();
-        labelEncryptionIcon->setPixmap(QIcon(":/icons/lock_closed").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+        labelEncryptionIcon->setPixmap(QIcon(iconLockClosed).pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
         labelEncryptionIcon->setToolTip(tr("Wallet is <b>encrypted</b> and currently <b>locked</b>"));
         encryptWalletAction->setChecked(true);
         changePassphraseAction->setEnabled(true);

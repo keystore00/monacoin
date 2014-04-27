@@ -109,6 +109,9 @@ private:
     RPCConsole *rpcConsole;
 
   QString iconOverview, iconSend, iconReceivingAddresses, iconHistory, iconAddressBook;
+  QString iconConnect0, iconConnect1, iconConnect2, iconConnect3, iconConnect4;
+  QString iconSynced;
+  QString iconLockOpend, iconLockClosed;
 
     QMovie *syncIconMovie;
     /** Keep track of previous number of blocks, to detect progress */
@@ -148,8 +151,9 @@ public slots:
        @param[in] style     modality and style definitions (icon and used buttons - buttons only for message boxes)
                             @see CClientUIInterface::MessageBoxFlags
        @param[in] ret       pointer to a bool that will be modified to whether Ok was clicked (modal only)
+       @param[in] extra     extra information
     */
-    void message(const QString &title, const QString &message, unsigned int style, bool *ret = NULL);
+    void message(const QString &title, const QString &message, unsigned int style, bool *ret = NULL, const QString &extra = "");
     /** Asks the user whether to pay the transaction fee or to cancel the transaction.
        It is currently not possible to pass a return value to another thread through
        BlockingQueuedConnection, so an indirected pointer is used.
