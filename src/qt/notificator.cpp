@@ -228,7 +228,7 @@ void Notificator::notifySystray(Class cls, Sound snd, const QString &title, cons
 {
     Q_UNUSED(icon);
     QSystemTrayIcon::MessageIcon sicon = QSystemTrayIcon::NoIcon;
-    QSound *sound;
+    QSound *sound = NULL;
     switch(cls) // Set icon based on class
     {
     case Information:
