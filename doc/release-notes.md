@@ -1,4 +1,4 @@
-0.8.7.1 changes
+0.8.7.0 changes
 =============
 - Mac and Windows Official Gitian Builds: upgrade to openssl-1.0.1g for CVE-2014-0160
                    Linux was not vulnerable with Lucid openssl-0.9.8k
@@ -7,8 +7,7 @@
 - Upgrade openssl, qt, miniupnpc, zlib, libpng, qrencode
 - Many bug fixes from Bitcoin 0.8.7rc stable branch
     including transaction malleability mitigation backports from 0.9
-- Add testnet checkpoints
-- Add new testnet seed
+- Implemented the DigiShield difficulty algorithm
 
 0.8.6.2 changes
 =============
