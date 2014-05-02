@@ -5,6 +5,7 @@
 #include "splashscreen.h"
 #include "clientversion.h"
 #include "util.h"
+#include "custom.h"
 
 #include <QPainter>
 #undef loop /* ugh, remove this when the #define loop is gone from util.h */
