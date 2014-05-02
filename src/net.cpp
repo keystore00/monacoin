@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2012 The Bitcoin developers
+// Copyright (c) 2009-2014 The Bitcoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1192,12 +1192,12 @@ void MapPort(bool)
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strMainNetDNSSeed[][2] = {
-    {"monacoin.org", "dnsseed.monacoin.org"},
+//    {"monacoin.org", "dnsseed.monacoin.org"},
     {NULL, NULL}
 };
 
 static const char *strTestNetDNSSeed[][2] = {
-    {"monacoin.org", "test-dnsseed.monacoin.org"},
+//    {"monacoin.org", "test-dnsseed.monacoin.org"},
     {NULL, NULL}
 };
 
@@ -1246,13 +1246,7 @@ void ThreadDNSAddressSeed()
 
 unsigned int pnSeed[] =
 {
-    0xb4ed6257,
-    0xf713f285,
-    0x5d33f285,
-    0xe132f285,
-    0x3df85edb,
-    0xf3277999,
-    0xd7c4d432
+	0x8AEBF285, 0x59277899
 };
 
 void DumpAddresses()
