@@ -38,7 +38,9 @@ SplashScreen::SplashScreen(const QPixmap &pixmap, Qt::WindowFlags f) :
         newPixmap     = QPixmap(":/images/splash2");
     }
 */
-    newPixmap = QPixmap(":/images/splash");
+    boost::filesystem::path custompath = GetCustomDir();
+    QString splash = GetCustomPath(custompath/"splash.png", ":/images/splash");
+    newPixmap = QPixmap(splash);
 
 
     QPainter pixPaint(&newPixmap);
